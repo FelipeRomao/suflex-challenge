@@ -10,7 +10,7 @@ datasource db {
 model Product {
   id       String  @id @default(uuid())
   name    String
-  dias_para_vencimento Int
+  dias_para_vencimento String
 
   @@map("products")
 }

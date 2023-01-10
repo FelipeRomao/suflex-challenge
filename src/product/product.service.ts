@@ -6,15 +6,28 @@ import { PrismaService } from '../database/prisma-service';
 export class ProductService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findByAlphabeticalOrder() {
-    return `This action returns all product ordered by alphabetical`;
+  async findByAlphabeticalOrder() {
+    return await this.prisma
+      .$queryRaw`SELECT * FROM products ORDER BY [name] COLLATE NOCASE ASC`;
   }
 
-  findByProductsExpiredToday() {
-    return `This action returns all product expired today`;
+  async findByProductsExpiredToday() {
+    return await this.prisma.product.findMany({
+      where: {
+        dias_para_vencimento: {
+          equals: '0',
+        },
+      },
+    });
   }
 
-  findExpireTomorrow() {
-    return `This action returns all product expire tomorrow`;
+  async findExpireTomorrow() {
+    return await this.prisma.product.findMany({
+      where: {
+        dias_para_vencimento: {
+          equals: '1',
+        },
+      },
+    });
   }
 }
